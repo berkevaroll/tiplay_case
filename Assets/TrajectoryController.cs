@@ -14,26 +14,32 @@ public class TrajectoryController : MonoBehaviour
     public float yLimit;
     public float g;
 
-    private Vector3 worldPosition;
+    private float mouseX;
+    private float mouseY;
+    private float lastX;
+    private float lastY;
     private void Start()
     {
         g = Mathf.Abs(Physics.gravity.y);
+
     }
     private void Update()
     {
         StartCoroutine(RenderArc());
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.nearClipPlane;
         
+
         if (Input.GetMouseButton(0))
         {
-            Vector3 lastPos = Input.mousePosition;
-            lastPos.z = Camera.main.nearClipPlane;
-            Vector3 delta = Vector3.zero;
-            worldPosition = Camera.main.ScreenToWorldPoint(delta);
-            velocity.x += worldPosition.x * Time.deltaTime;
-            velocity.z += worldPosition.y * Time.deltaTime;
+            lastX = Input.GetAxis("Mouse X");
+            lastY = Input.GetAxis("Mouse Y");
+            velocity.x += -lastX  * .8f;
+            velocity.z += -lastY * 2f;
         }
+        if (Input.GetMouseButtonUp(0))
+        {
+            //ball movement
+        }
+
     }
     private IEnumerator RenderArc()
     {
