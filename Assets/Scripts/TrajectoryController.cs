@@ -13,10 +13,10 @@ public class TrajectoryController : MonoBehaviour
     public GameObject endPoint;
     public LineRenderer line;
 
-    private float mouseX;
-    private float mouseY;
     private float lastX;
     private float lastY;
+    private float maxZ;
+    private float maxX;
     private void Start()
     {
 
@@ -31,16 +31,39 @@ public class TrajectoryController : MonoBehaviour
 
             lastX = Input.GetAxis("Mouse X");
             lastY = Input.GetAxis("Mouse Y");
+            
             Vector3 myMid = midPoint.transform.position;
             Vector3 myEnd = endPoint.transform.position;
-            midPoint.transform.position = new Vector3(myMid.x - lastY, myMid.y, myMid.z + lastX * 1.2f);
-            endPoint.transform.position = new Vector3(myEnd.x - lastY, myEnd.y, myEnd.z + lastX * .6f);
+            Vector3 myStart = startPoint.transform.position;
+            maxZ = myMid.z + lastX * .4f;
+            maxX = myEnd.x - lastY;
+            if (maxZ < -2.5f)
+            {
+                maxZ = -2.5f;
+            }else if(maxZ > 2.5f)
+            {
+                maxZ = 2.5f;
+            }
+            if (maxX > 10f)
+            {
+                maxX = 10f;
+            }else if(maxX < .5f)
+            {
+                maxX = .5f;
+            }
+            endPoint.transform.position = new Vector3(maxX, myEnd.y, midPoint.transform.position.z/2);
+            midPoint.transform.position = new Vector3((endPoint.transform.position.x - startPoint.transform.position.x)/2, myMid.y, maxZ);
+            
+            
 
         }
         //StartCoroutine(RenderArc());
         if (Input.GetMouseButtonUp(0))
         {
+            GetComponent<ParabolaController>().line.enabled = false;
             GetComponent<ParabolaController>().FollowParabola();
+            
+
         }
 
     }

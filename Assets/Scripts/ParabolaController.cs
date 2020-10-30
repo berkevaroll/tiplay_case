@@ -50,12 +50,14 @@ public class ParabolaController : MonoBehaviour
             return;
 
         int accur = 50;
+
         line.positionCount = accur + 1;
         line.startColor = Color.red;
         line.endColor = Color.white;
         Vector3 prevPos = gizmo.Points[0].position;
         for (int c = 1; c <= accur; c++)
         {
+       
             float currTime = c * gizmo.GetDuration() / accur;
             Vector3 currPos = gizmo.GetPositionAtTime(currTime);
             float mag = (currPos - prevPos).magnitude * 2;
